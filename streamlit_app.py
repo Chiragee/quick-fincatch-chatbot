@@ -60,6 +60,20 @@ CONTENT:
         # Step 3: Query the Gemini API with the constructed prompt.
         try:
             response_text = call_gemini_complete(answer_prompt)
+
+            response_text = response_text.strip()
+
+            if response_text.startswith('```markdown'):
+                response_text = response_text.split('```markdown', 1)[1]
+            
+            if response_text.endswith('```'):
+                response_text = response_text.rsplit('```', 1)[0]
+
+            response_text = response_text.strip()
+
+            if not response_text:
+                response_text = "No response from the model, please try again."
+
         except Exception as e:
             st.error(f"Error call_gemini_complete: {e}")
             response_text = f"Error call_gemini_complete: {e}"
