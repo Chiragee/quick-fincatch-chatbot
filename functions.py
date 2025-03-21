@@ -42,7 +42,7 @@ def get_identity_token(audience):
     raise Exception("Error fetching identity token.")
 
 
-def call_gemini_complete(prompt: str, model_name: str = 'gemini-2.0-flash-thinking-exp') -> str:
+def call_gemini_complete(prompt: str, model_name: str = 'gemini-2.0-flash') -> str:
     """
     Calls the Gemini model synchronously without any retry logic.
     It configures the client on each call using the GOOGLE_API_KEY from environment.
