@@ -46,16 +46,22 @@ else:
 
         # Step 2: Build the Gemini prompt using the user query and the retrieved context.
         answer_prompt = f'''The user has provided a query. Content has been retrieved from a graph database based on its relevance to the query. Analyze the content and provide an answer to the users query.
-- Your response must be intelligent, logical, and answer the users query fully.
-- Ensure that you cite the information id's using square brackets in your response. For example: "this is some information [1234]". This is essential for the user to be able to verify the information.
-- The user does not have access to the content retrieved from the graph database, so you must provide all relevant information in your response. i.e dont say according to [1234] the answer is X. You must actually provide the specific answer in full.
-- Your output format must be structured markdown. No preliminary comments or markdown tags are allowed, your response must directly answer the users query and be in markdown format.
 
-QUERY: {prompt}
+        - Your response must be intelligent, logical, and answer the users query fully.
+        - Ensure that you cite the information id's using square brackets in your response. For example: "this is some information [1234]". This is essential for the user to be able to verify the information.
+        - The user does not have access to the content retrieved from the graph database, so you must provide all relevant information in your response. i.e dont say according to [1234] the answer is X. You must actually provide the specific answer in full.
+        - Your output format must be structured markdown. No preliminary comments or markdown tags are allowed, your response must directly answer the users query and be in markdown format.
 
-CONTENT:
-{context_data}
-'''
+        QUERY: {prompt}
+
+        CONTENT:
+        {context_data}
+
+        - Your response must be intelligent, logical, and answer the users query fully.
+        - Ensure that you cite the information id's using square brackets in your response. For example: "this is some information [1234]". This is essential for the user to be able to verify the information.
+        - The user does not have access to the content retrieved from the graph database, so you must provide all relevant information in your response. i.e dont say according to [1234] the answer is X. You must actually provide the specific answer in full.
+        - Your output format must be structured markdown. No preliminary comments or markdown tags are allowed, your response must directly answer the users query and be in markdown format.
+        '''
 
         # Step 3: Query the Gemini API with the constructed prompt.
         try:
