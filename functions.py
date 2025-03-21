@@ -1,8 +1,6 @@
 import os
 import json
 import requests
-from dotenv import load_dotenv
-load_dotenv()
 
 import google.auth.transport.requests
 import google.oauth2.id_token
@@ -20,13 +18,10 @@ def get_identity_token(audience):
     Raises:
         Exception: If the token cannot be fetched.
     '''
-    try:
+
         # If running under Streamlit, st.secrets is automatically available.
-        import streamlit as st
-        credentials_json = st.secrets["SERVICE_ACCOUNT_CREDENTIALS"]
-    except Exception:
-        # Fallback to environment variable if st.secrets is not available.
-        credentials_json = os.environ["SERVICE_ACCOUNT_CREDENTIALS"]
+    import streamlit as st
+    credentials_json = st.secrets["SERVICE_ACCOUNT_CREDENTIALS"]
 
     if not credentials_json:
         raise Exception("Service account credentials not found in secrets or environment variable.")
