@@ -73,11 +73,17 @@ def get_context(query: str, **params_for_query) -> dict:
         headers = {"Authorization": f"Bearer {token}"}
         
         try:
+            current_timestamp = int(datetime.now().timestamp())
+            
             start_date = params_for_query.get('start_date', '2024-06-01')
             start_timestamp = int(datetime.strptime(start_date, '%Y-%m-%d').timestamp())
-            end_date = params_for_query.get('end_date', '2025-03-22')
-            end_timestamp = int(datetime.strptime(end_date, '%Y-%m-%d').timestamp())
-            current_timestamp = int(datetime.now().timestamp())
+
+            end_date = params_for_query.get('end_date')
+            if not end_date:
+                end_timestamp = current_timestamp
+            else:
+                end_timestamp = int(datetime.strptime(end_date, '%Y-%m-%d').timestamp())
+
             if end_timestamp > current_timestamp:
                 end_timestamp = current_timestamp
             if start_timestamp > end_timestamp:
