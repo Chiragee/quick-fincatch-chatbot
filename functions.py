@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from datetime import datetime
 
 import google.auth.transport.requests
 import google.oauth2.id_token
@@ -59,7 +60,7 @@ def call_gemini_complete(prompt: str, model_name: str = 'gemini-2.0-flash') -> s
     return response.candidates[0].content.parts[-1].text
 
 
-def get_context(query: str) -> dict:
+def get_context(query: str, **params_for_query) -> dict:
     """
     Retrieves context from the Cloud Run endpoint.
     - It first gets an identity token.
@@ -71,14 +72,29 @@ def get_context(query: str) -> dict:
         token = get_identity_token(audience=GRAPH_OUTPUT_API_URL)
         headers = {"Authorization": f"Bearer {token}"}
         
+        try:
+            start_date = params_for_query.get('start_date', '2024-06-01')
+            start_timestamp = int(datetime.strptime(start_date, '%Y-%m-%d').timestamp())
+            end_date = params_for_query.get('end_date', '2025-03-22')
+            end_timestamp = int(datetime.strptime(end_date, '%Y-%m-%d').timestamp())
+            current_timestamp = int(datetime.now().timestamp())
+            if end_timestamp > current_timestamp:
+                end_timestamp = current_timestamp
+            if start_timestamp > end_timestamp:
+                start_timestamp = start_timestamp = int(datetime.strptime('2024-06-01', '%Y-%m-%d').timestamp())
+        except Exception as e:
+            print(f"Error parsing date: {e}, using default dates.")
+            start_timestamp = int(datetime.strptime('2024-06-01', '%Y-%m-%d').timestamp())
+            end_timestamp = int(datetime.strptime('2025-03-22', '%Y-%m-%d').timestamp())
+        
         params = {
-            'project': "FINCATCH",
+            'project': params_for_query.get('project', 'FINCATCH'),
             'query_content': query,
-            'context_window': 100000,
-            'k': 50,
+            'context_window': params_for_query.get('context_window', 100000),
+            'k': params_for_query.get('k', 50),
             'index': True,
-            'start_timestamp': 1717171200, #Saturday, June 1, 2024 12:00:00 AM GMT+08:00
-            'end_timestamp': 1742400000 #Thursday, March 20, 2025 12:00:00 AM GMT+08:00
+            'start_timestamp': start_timestamp, #1717171200, #Saturday, June 1, 2024 12:00:00 AM GMT+08:00
+            'end_timestamp': end_timestamp #1742400000 #Thursday, March 20, 2025 12:00:00 AM GMT+08:00
         }
         # Adjust the URL as necessary for your deployment.
         url = f"{GRAPH_OUTPUT_API_URL}/get_similar_entity_and_relationships"

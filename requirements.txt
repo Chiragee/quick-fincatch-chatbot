@@ -2,3 +2,5 @@ streamlit
 openai
 google-auth==2.35.0
 google-generativeai==0.8.3
+google-api-core==2.22.0
+tiktoken==0.8.0
