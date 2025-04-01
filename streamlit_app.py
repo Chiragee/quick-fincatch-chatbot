@@ -65,7 +65,7 @@ else:
 
         # Step 3: Query the Gemini API with the constructed prompt.
         try:
-            response_text = call_gemini_complete(answer_prompt)
+            response_text = call_gemini_complete(answer_prompt, model_name = 'gemini-2.5-pro-exp-03-25')
 
             response_text = response_text.strip()
 

@@ -91,13 +91,13 @@ def get_context(query: str, **params_for_query) -> dict:
         except Exception as e:
             print(f"Error parsing date: {e}, using default dates.")
             start_timestamp = int(datetime.strptime('2024-06-01', '%Y-%m-%d').timestamp())
-            end_timestamp = int(datetime.strptime('2025-03-22', '%Y-%m-%d').timestamp())
+            end_timestamp = int(datetime.now().timestamp())
         
         params = {
             'project': params_for_query.get('project', 'FINCATCH'),
             'query_content': query,
             'context_window': params_for_query.get('context_window', 100000),
-            'k': params_for_query.get('k', 50),
+            'k': params_for_query.get('k', 100),
             'index': True,
             'start_timestamp': start_timestamp, #1717171200, #Saturday, June 1, 2024 12:00:00 AM GMT+08:00
             'end_timestamp': end_timestamp #1742400000 #Thursday, March 20, 2025 12:00:00 AM GMT+08:00
